@@ -13,6 +13,10 @@ import Shop from './components/NavbarLinks/Shop'
 import Support from './components/NavbarLinks/Support'
 import Cart from './components/payment/Cart'
 import Trending from './components/LandingPage/Trending'
+import Headphones from './components/ShopLinks/Headphones'
+import Earbuds from './components/ShopLinks/Earbuds'
+import Speakers from './components/ShopLinks/Speakers'
+import HomeTheater from './components/ShopLinks/HomeTheater'
 
 
 
@@ -34,7 +38,7 @@ const App = () => {
                 <Trending />
                 <TrustBadges />
                 {/* <Team /> */}
-                <FAQ />
+                {/* <FAQ /> */}
                 {/* <Newsletter /> */}
               </>
             } />
@@ -44,10 +48,10 @@ const App = () => {
             <Route path="/shop" element={<Shop />} />
             <Route path="/support" element={<Support />} />
             <Route path="/cart" element={<Cart />} />
-
-            
-            {/* <Route path="/all-products" element={<AllProducts />} /> */}
-            {/* <Route path="/Wireless Earbuds" element={<Wireless />} /> */}
+            <Route path="/Headphones" element={<Headphones />} />
+            <Route path="/Earbuds" element={<Earbuds />} />
+            <Route path="/Speakers" element={<Speakers />} />
+            <Route path="/HomeTheater" element={<HomeTheater />} />
           </Routes>
           
           {/* Footer appears on all pages */}

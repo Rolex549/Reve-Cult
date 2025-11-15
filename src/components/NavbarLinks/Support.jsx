@@ -1,346 +1,277 @@
-import { useState } from 'react';
-import { Search, Mail, MessageCircle, Book, HelpCircle, Phone, Clock, Send, X } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState } from "react";
+import {
+  Search,
+  Mail,
+  MessageCircle,
+  Book,
+  HelpCircle,
+  Phone,
+  Clock,
+  Send,
+  X,
+} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Support() {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
   });
-
-  const handleSubmit = () => {
-    if (!formData.name || !formData.email || !formData.subject || !formData.message) {
-      alert('Please fill in all fields');
-      return;
-    }
-    alert('Thank you for contacting us! We\'ll get back to you soon.');
-    setFormData({ name: '', email: '', subject: '', message: '' });
-  };
 
   const faqs = [
     {
-      question: 'How do I reset my password?',
-      answer: 'Go to the login page and click "Forgot Password". Follow the instructions sent to your email.',
-      category: 'account',
-      keywords: ['password', 'reset', 'login', 'forgot', 'security']
+      question: "How do I reset my password?",
+      answer:
+        'Go to the login page and click "Forgot Password". Follow the instructions sent to your email.',
+      keywords: ["password", "reset", "login"],
     },
     {
-      question: 'What payment methods do you accept?',
-      answer: 'We accept all major credit cards, PayPal, and bank transfers for enterprise customers.',
-      category: 'billing',
-      keywords: ['payment', 'credit card', 'paypal', 'billing', 'pay']
+      question: "What payment methods do you accept?",
+      answer:
+        "We accept all major credit cards, UPI, and PayPal for smooth checkout.",
+      keywords: ["payment", "upi", "pay"],
     },
     {
-      question: 'How can I cancel my subscription?',
-      answer: 'Navigate to Account Settings > Subscription and click "Cancel Subscription". Your access will continue until the end of your billing period.',
-      category: 'subscription',
-      keywords: ['cancel', 'subscription', 'unsubscribe', 'account']
+      question: "Do you offer refunds?",
+      answer:
+        "Yes! We offer a 30-day money-back guarantee on all REVE CULT products.",
+      keywords: ["refund", "return"],
     },
     {
-      question: 'Do you offer refunds?',
-      answer: 'Yes, we offer a 30-day money-back guarantee for all new subscriptions.',
-      category: 'billing',
-      keywords: ['refund', 'money back', 'guarantee', 'return']
+      question: "How can I cancel my subscription?",
+      answer:
+        'Go to Account Settings → Subscription → Click "Cancel Subscription".',
+      keywords: ["cancel", "subscription"],
     },
-    {
-      question: 'How do I upgrade my plan?',
-      answer: 'Go to Account Settings > Subscription and select the plan you want to upgrade to. The change will take effect immediately.',
-      category: 'subscription',
-      keywords: ['upgrade', 'plan', 'premium', 'subscription']
-    },
-    {
-      question: 'Is my data secure?',
-      answer: 'Yes, we use industry-standard encryption and security measures to protect your data. We are SOC 2 Type II certified.',
-      category: 'security',
-      keywords: ['security', 'data', 'encryption', 'safe', 'privacy']
-    }
   ];
 
   const supportOptions = [
     {
-      icon: <Mail className="w-6 h-6" />,
-      title: 'Email Support',
-      description: 'Get help via email within 24 hours',
-      action: 'support@revecult.com'
+      icon: <Mail className="w-6 h-6 text-purple-500" />,
+      title: "Email Support",
+      description: "Replies within 12–24 hours",
+      action: "support@revecult.com",
     },
     {
-      icon: <MessageCircle className="w-6 h-6" />,
-      title: 'Live Chat',
-      description: 'Chat with our support team instantly',
-      action: 'Start Chat'
+      icon: <MessageCircle className="w-6 h-6 text-pink-500" />,
+      title: "Live Chat",
+      description: "Instant support (9 AM – 6 PM)",
+      action: "Start Chat",
     },
     {
-      icon: <Phone className="w-6 h-6" />,
-      title: 'Phone Support',
-      description: 'Talk to us directly for urgent issues',
-      action: '+91 90826 72164'
+      icon: <Phone className="w-6 h-6 text-purple-400" />,
+      title: "Call Us",
+      description: "For urgent issues",
+      action: "+91 90826 72164",
     },
     {
-      icon: <Book className="w-6 h-6" />,
-      title: 'Documentation',
-      description: 'Browse our comprehensive guides',
-      action: 'View Docs'
-    }
+      icon: <Book className="w-6 h-6 text-rose-400" />,
+      title: "Guides & Docs",
+      description: "Learn everything quickly",
+      action: "View Docs",
+    },
   ];
 
-  const searchFAQs = (query) => {
-    if (!query.trim()) return [];
-    
-    const lowerQuery = query.toLowerCase();
-    return faqs.filter(faq => 
-      faq.question.toLowerCase().includes(lowerQuery) ||
-      faq.answer.toLowerCase().includes(lowerQuery) ||
-      faq.keywords.some(keyword => keyword.includes(lowerQuery))
-    );
-  };
-
-  const searchResults = searchFAQs(searchQuery);
-
-  const handleSearchChange = (e) => {
-    const value = e.target.value;
-    setSearchQuery(value);
-    setShowSearchResults(value.trim().length > 0);
-  };
-
-  const clearSearch = () => {
-    setSearchQuery('');
-    setShowSearchResults(false);
-  };
+  const searchResults = faqs.filter(
+    (faq) =>
+      faq.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      faq.keywords.some((k) => k.includes(searchQuery.toLowerCase()))
+  );
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <motion.div 
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="bg-blue-600 text-white py-16"
-      >
-        <div className="max-w-6xl mx-auto px-4">
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-4xl font-bold mb-4"
-          >
-            How can we help you?
-          </motion.h1>
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-xl text-blue-100 mb-8"
-          >
-            Search our knowledge base or get in touch with our support team
-          </motion.p>
-          
-          {/* Search Bar with Results */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="relative max-w-2xl"
-          >
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
-            <input
-              type="text"
-              placeholder="Search for answers..."
-              value={searchQuery}
-              onChange={handleSearchChange}
-              className="w-full pl-12 pr-12 py-4 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-300"
-            />
-            {searchQuery && (
-              <button
-                onClick={clearSearch}
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            )}
-            
-            {/* Search Results Dropdown */}
-            <AnimatePresence>
-              {showSearchResults && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="absolute w-full mt-2 bg-white rounded-lg shadow-xl max-h-96 overflow-y-auto z-20"
-                >
-                  {searchResults.length > 0 ? (
-                    <div className="p-2">
-                      {searchResults.map((faq, index) => (
-                        <motion.div
-                          key={index}
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: index * 0.05 }}
-                          className="p-4 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors"
-                          onClick={() => {
-                            setShowSearchResults(false);
-                            document.getElementById(`faq-${index}`)?.scrollIntoView({ behavior: 'smooth' });
-                          }}
-                        >
-                          <div className="font-semibold text-gray-900 mb-1">{faq.question}</div>
-                          <div className="text-sm text-gray-600 line-clamp-2">{faq.answer}</div>
-                          <div className="text-xs text-blue-600 mt-1 capitalize">{faq.category}</div>
-                        </motion.div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="p-8 text-center text-gray-500">
-                      No results found for "{searchQuery}"
-                    </div>
-                  )}
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.div>
-        </div>
-      </motion.div>
+    <div className="min-h-screen bg-white text-gray-900">
 
-      <div className="max-w-6xl mx-auto px-4 py-12">
-        {/* Support Options */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-          {supportOptions.map((option, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 * index }}
-              whileHover={{ scale: 1.05, y: -5 }}
-              className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow"
+      {/* HERO SECTION */}
+      <section className="py-24 px-6 text-center border-b bg-gradient-to-br from-[#EDE7FF] via-[#FBE8F4] to-white">
+        <motion.h1
+          className="text-4xl md:text-6xl font-extrabold tracking-tight text-gray-900"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          Support Center
+        </motion.h1>
+
+        <motion.p
+          className="text-gray-600 text-lg mt-4 max-w-2xl mx-auto"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+        >
+          We’re here for you — calm, clear, pastel-soft support for every REVE CULT user.
+        </motion.p>
+
+        {/* Search Bar */}
+        <motion.div
+          className="relative max-w-xl mx-auto mt-10"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
+        >
+          <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+
+          <input
+            type="text"
+            placeholder="Search support articles..."
+            className="w-full border rounded-full py-4 pl-12 pr-12 text-gray-900 bg-[#F6F4FF] focus:ring-2 focus:ring-purple-300 outline-none shadow-sm"
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setShowSearchResults(e.target.value.trim().length > 0);
+            }}
+          />
+
+          {searchQuery && (
+            <button
+              onClick={() => {
+                setSearchQuery("");
+                setShowSearchResults(false);
+              }}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
             >
-              <div className="text-blue-600 mb-4">{option.icon}</div>
-              <h3 className="text-lg font-semibold mb-2">{option.title}</h3>
-              <p className="text-gray-600 text-sm mb-4">{option.description}</p>
-              <button className="text-blue-600 font-medium hover:text-blue-700">
-                {option.action} →
-              </button>
-            </motion.div>
+              <X />
+            </button>
+          )}
+
+          {/* Search Results */}
+          <AnimatePresence>
+            {showSearchResults && (
+              <motion.div
+                initial={{ opacity: 0, y: -6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                className="absolute bg-white w-full mt-3 shadow-xl rounded-2xl max-h-80 overflow-y-auto border border-gray-200 z-20"
+              >
+                {searchResults.length > 0 ? (
+                  searchResults.map((faq, i) => (
+                    <div
+                      key={i}
+                      className="p-4 border-b hover:bg-gray-50 cursor-pointer"
+                    >
+                      <p className="font-medium text-gray-800">{faq.question}</p>
+                      <p className="text-gray-500 text-sm mt-1 line-clamp-2">
+                        {faq.answer}
+                      </p>
+                    </div>
+                  ))
+                ) : (
+                  <p className="p-6 text-sm text-gray-500">
+                    No results found for "{searchQuery}"
+                  </p>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
+      </section>
+
+      {/* SUPPORT OPTIONS */}
+      <section className="max-w-6xl mx-auto px-6 py-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {supportOptions.map((opt, i) => (
+          <motion.div
+            key={i}
+            className="p-6 rounded-2xl border bg-white shadow-sm hover:shadow-md hover:shadow-purple-100 transition cursor-pointer"
+            whileHover={{ scale: 1.03 }}
+          >
+            <div className="mb-4">{opt.icon}</div>
+            <h3 className="font-semibold text-lg text-gray-900">{opt.title}</h3>
+            <p className="text-gray-500 text-sm mt-2">{opt.description}</p>
+            <button className="mt-4 text-purple-600 font-medium">
+              {opt.action} →
+            </button>
+          </motion.div>
+        ))}
+      </section>
+
+      {/* FAQ */}
+      <section className="max-w-5xl mx-auto px-6 py-10">
+        <h2 className="text-3xl font-bold mb-8 flex items-center gap-2 text-gray-900">
+          <HelpCircle className="text-purple-500" /> FAQs
+        </h2>
+
+        <div className="space-y-4">
+          {faqs.map((faq, i) => (
+            <details
+              key={i}
+              className="bg-[#FAF7FF] border border-purple-100 rounded-2xl p-5 cursor-pointer shadow-sm"
+            >
+              <summary className="font-semibold text-lg text-gray-800">
+                {faq.question}
+              </summary>
+              <p className="text-gray-600 mt-3 ml-1">{faq.answer}</p>
+            </details>
           ))}
         </div>
+      </section>
 
-        {/* FAQ Section */}
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          className="mb-16"
-        >
-          <div className="flex items-center mb-6">
-            <HelpCircle className="w-8 h-8 text-blue-600 mr-3" />
-            <h2 className="text-3xl font-bold">Frequently Asked Questions</h2>
-          </div>
-          <div className="space-y-4">
-            {faqs.map((faq, index) => (
-              <motion.details
-                key={index}
-                id={`faq-${index}`}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.6 + index * 0.05 }}
-                className="bg-white rounded-lg shadow-sm"
-              >
-                <summary className="p-6 cursor-pointer font-semibold text-lg hover:text-blue-600">
-                  {faq.question}
-                </summary>
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="px-6 pb-6 text-gray-600"
-                >
-                  {faq.answer}
-                </motion.div>
-              </motion.details>
-            ))}
-          </div>
-        </motion.div>
+      {/* CONTACT FORM */}
+      <section className="max-w-5xl mx-auto px-6 py-20">
+        <h2 className="text-3xl font-bold mb-4 text-gray-900">Still need help?</h2>
+        <p className="text-gray-600 mb-8">
+          Fill out the form and our team will contact you soon.
+        </p>
 
-        {/* Contact Form */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8 }}
-          className="bg-white rounded-lg shadow-sm p-8"
-        >
-          <h2 className="text-3xl font-bold mb-2">Still need help?</h2>
-          <p className="text-gray-600 mb-8">Fill out the form below and our team will get back to you as soon as possible.</p>
-          
-          <div className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <motion.div whileFocus={{ scale: 1.02 }}>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
-                <input
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Your name"
-                />
-              </motion.div>
-              <motion.div whileFocus={{ scale: 1.02 }}>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                <input
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({...formData, email: e.target.value})}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="your@email.com"
-                />
-              </motion.div>
-            </div>
-            
-            <motion.div whileFocus={{ scale: 1.02 }}>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Subject</label>
-              <input
-                type="text"
-                value={formData.subject}
-                onChange={(e) => setFormData({...formData, subject: e.target.value})}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="How can we help?"
-              />
-            </motion.div>
-            
-            <motion.div whileFocus={{ scale: 1.02 }}>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
-              <textarea
-                value={formData.message}
-                onChange={(e) => setFormData({...formData, message: e.target.value})}
-                rows="6"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Describe your issue in detail..."
-              />
-            </motion.div>
-            
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={handleSubmit}
-              className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center gap-2"
-            >
-              <Send className="w-5 h-5" />
-              Send Message
-            </motion.button>
-          </div>
-        </motion.div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <InputField
+            label="Name"
+            value={formData.name}
+            onChange={(v) => setFormData({ ...formData, name: v })}
+          />
+          <InputField
+            label="Email"
+            value={formData.email}
+            onChange={(v) => setFormData({ ...formData, email: v })}
+          />
+        </div>
 
-        {/* Hours */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
-          className="mt-12 bg-blue-50 border border-blue-200 rounded-lg p-6 flex items-center justify-center gap-3"
+        <InputField
+          label="Subject"
+          value={formData.subject}
+          onChange={(v) => setFormData({ ...formData, subject: v })}
+        />
+
+        <label className="text-sm font-medium text-gray-600 mt-4">
+          Message
+        </label>
+        <textarea
+          rows="6"
+          value={formData.message}
+          onChange={(e) =>
+            setFormData({ ...formData, message: e.target.value })
+          }
+          className="w-full border rounded-2xl p-4 mt-2 bg-[#F6F4FF] outline-none focus:ring-2 focus:ring-purple-300 shadow-sm"
+        />
+
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          className="mt-6 bg-gradient-to-r from-purple-600 to-pink-500 text-white px-10 py-4 rounded-full font-semibold shadow-md hover:shadow-lg"
         >
-          <Clock className="w-5 h-5 text-blue-600" />
-          <p className="text-gray-700">
-            <span className="font-semibold">Support Hours:</span> Monday - Friday, 9:00 AM - 6:00 PM EST
-          </p>
-        </motion.div>
-      </div>
+          <Send className="inline w-5 h-5 mr-2" />
+          Send Message
+        </motion.button>
+
+        <div className="mt-10 flex items-center gap-3 text-gray-600">
+          <Clock className="w-5 h-5 text-purple-500" />
+          Support Hours: Mon–Fri, 9 AM – 6 PM IST
+        </div>
+      </section>
+    </div>
+  );
+}
+
+/* INPUT FIELD COMPONENT */
+function InputField({ label, value, onChange }) {
+  return (
+    <div>
+      <label className="text-sm font-medium text-gray-700">{label}</label>
+      <input
+        className="w-full border rounded-2xl p-4 mt-2 bg-[#F6F4FF] outline-none focus:ring-2 focus:ring-purple-300 shadow-sm"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+      />
     </div>
   );
 }

@@ -1,7 +1,8 @@
 import { useState, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Star, Eye, ArrowLeft, Sparkles } from 'lucide-react';
-import { useCart } from '../LandingPage/CartContext'; 
+import { useCart } from '../LandingPage/CartContext';
+import { useNavigate } from "react-router-dom";
 import image10 from '../../assets/TWS 600 (1) original.png'
 import image30 from '../../assets/SOUL original.jpg';
 import image40 from '../../assets/BUDS TONE original.png';
@@ -12,12 +13,13 @@ import image410 from '../../assets/BUDS TONE black original.png';
 import image420 from '../../assets/REVE TONE Cyan.png';
 import image430 from '../../assets/BUDS TONE white.png';
 
+
 // Memoized Product Card Component
 const ProductCard = memo(({ product, selectedColor, onColorChange, onAddToCart, onViewDetails, isAdded, isHovered, onHover }) => {
   const currentImage = product.colors[selectedColor].image;
-  
+
   return (
-    <div 
+    <div
       className="group relative"
       onMouseEnter={() => onHover(product.id)}
       onMouseLeave={() => onHover(null)}
@@ -30,12 +32,11 @@ const ProductCard = memo(({ product, selectedColor, onColorChange, onAddToCart, 
             className="relative w-full h-full object-contain transition-transform duration-300 group-hover:scale-110"
             loading="lazy"
           />
-          
+
           <button
             onClick={onViewDetails}
-            className={`absolute top-3 right-3 bg-white/95 p-2.5 rounded-full shadow-lg hover:bg-pink-50 transition-all duration-200 ${
-              isHovered ? 'opacity-100' : 'opacity-0'
-            }`}
+            className={`absolute top-3 right-3 bg-white/95 p-2.5 rounded-full shadow-lg hover:bg-pink-50 transition-all duration-200 ${isHovered ? 'opacity-100' : 'opacity-0'
+              }`}
           >
             <Eye className="w-4 h-4 text-pink-600" />
           </button>
@@ -45,7 +46,7 @@ const ProductCard = memo(({ product, selectedColor, onColorChange, onAddToCart, 
           <h3 className="text-lg lg:text-xl font-bold text-gray-900 mb-3">
             {product.name}
           </h3>
-          
+
           <div className="flex items-center gap-2 mb-4">
             <div className="flex items-center bg-yellow-50 px-2 py-1 rounded-lg">
               <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
@@ -64,9 +65,9 @@ const ProductCard = memo(({ product, selectedColor, onColorChange, onAddToCart, 
               >
                 <div
                   className="absolute inset-0 rounded-full transition-shadow duration-200"
-                  style={{ 
+                  style={{
                     backgroundColor: color.hex,
-                    boxShadow: selectedColor === idx 
+                    boxShadow: selectedColor === idx
                       ? `0 0 0 2px white, 0 0 0 4px ${color.hex}`
                       : '0 0 0 1px rgba(0,0,0,0.1)'
                   }}
@@ -86,13 +87,12 @@ const ProductCard = memo(({ product, selectedColor, onColorChange, onAddToCart, 
             </span>
           </div>
 
-          <button 
+          <button
             onClick={onAddToCart}
-            className={`w-full font-semibold py-3.5 rounded-2xl flex items-center justify-center gap-2 transition-all duration-200 shadow-lg hover:shadow-xl active:scale-95 ${
-              isAdded
+            className={`w-full font-semibold py-3.5 rounded-2xl flex items-center justify-center gap-2 transition-all duration-200 shadow-lg hover:shadow-xl active:scale-95 ${isAdded
                 ? 'bg-gradient-to-r from-green-500 to-green-600 text-white'
                 : 'bg-gradient-to-r from-pink-500 via-pink-600 to-purple-600 text-white'
-            }`}
+              }`}
           >
             {isAdded ? (
               <>
@@ -125,6 +125,10 @@ export default function Shop() {
   const [addedToCart, setAddedToCart] = useState({});
   const [hoveredProduct, setHoveredProduct] = useState(null);
   const { addToCart } = useCart();
+  const navigate = useNavigate();
+  const [showCategories, setShowCategories] = useState(false);
+
+
 
   const products = [
     {
@@ -185,9 +189,9 @@ export default function Shop() {
       ...product,
       selectedColor: product.colors[currentColorIndex]
     };
-    
+
     addToCart(productWithColor);
-    
+
     setAddedToCart(prev => ({ ...prev, [product.id]: true }));
     setTimeout(() => {
       setAddedToCart(prev => ({ ...prev, [product.id]: false }));
@@ -204,19 +208,79 @@ export default function Shop() {
       <div className="sticky top-0 z-40 bg-white/90 border-b border-gray-200/50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5">
           <div className="flex items-center justify-between">
+
+            {/* BACK BUTTON */}
             <button className="flex items-center gap-2 text-gray-700 hover:text-pink-600 transition-colors duration-200">
               <ArrowLeft className="w-5 h-5" />
               <span className="font-semibold hidden sm:inline">Back</span>
             </button>
-            
+
+            {/* TITLE */}
             <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
               Shop
             </h1>
-            
-            <div className="w-[44px]"></div>
+
+            {/* RIGHT SIDE — CLICKABLE DROPDOWN */}
+            <div className="relative">
+              <button
+                onClick={() => setShowCategories(!showCategories)}
+                className="font-semibold text-gray-700 hover:text-pink-600 transition"
+              >
+                Categories
+              </button>
+
+              {showCategories && (
+                <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-xl p-2 z-50">
+
+                  <button
+                    onClick={() => {
+                      setShowCategories(false);
+                      navigate("/earbuds");    // <-- IMPORTANT
+                    }}
+                    className="w-full text-left px-4 py-2 rounded-lg hover:bg-pink-50 transition"
+                  >
+                    Earbuds
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setShowCategories(false);
+                      navigate("/earbuds");    // <-- IMPORTANT
+                    }}
+                    className="w-full text-left px-4 py-2 rounded-lg hover:bg-pink-50 transition"
+                  >
+                    Headphones
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setShowCategories(false);
+                      navigate("/earbuds");    // <-- IMPORTANT
+                    }}
+                    className="w-full text-left px-4 py-2 rounded-lg hover:bg-pink-50 transition"
+                  >
+                    Powerbank
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setShowCategories(false);
+                      navigate("/earbuds");    // <-- IMPORTANT
+                    }}
+                    className="w-full text-left px-4 py-2 rounded-lg hover:bg-pink-50 transition"
+                  >
+                    HomeTheater
+                  </button>
+
+                </div>
+              )}
+            </div>
+
           </div>
         </div>
       </div>
+
+
 
       <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
         <div className="max-w-7xl mx-auto">
@@ -256,7 +320,7 @@ export default function Shop() {
             {products.map((product) => {
               const currentColorIndex = selectedColors[product.id] || 0;
               const currentImage = product.colors[currentColorIndex].image;
-              
+
               return (
                 <div
                   key={product.id}
@@ -275,7 +339,7 @@ export default function Shop() {
 
                     <div className="p-6">
                       <h3 className="text-xl font-bold text-gray-900 mb-3">{product.name}</h3>
-                      
+
                       <div className="flex items-center gap-2 mb-4">
                         <div className="flex items-center bg-yellow-50 px-2.5 py-1.5 rounded-lg">
                           <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
@@ -297,9 +361,9 @@ export default function Shop() {
                           >
                             <div
                               className="absolute inset-0 rounded-full transition-shadow"
-                              style={{ 
+                              style={{
                                 backgroundColor: color.hex,
-                                boxShadow: currentColorIndex === idx 
+                                boxShadow: currentColorIndex === idx
                                   ? `0 0 0 2px white, 0 0 0 4px ${color.hex}`
                                   : '0 0 0 1px rgba(0,0,0,0.1)'
                               }}
@@ -319,16 +383,15 @@ export default function Shop() {
                         </span>
                       </div>
 
-                      <button 
+                      <button
                         onClick={(e) => {
                           e.stopPropagation();
                           handleAddToCart(product);
                         }}
-                        className={`w-full font-semibold py-4 rounded-2xl flex items-center justify-center gap-2 transition-all duration-200 shadow-lg active:scale-95 ${
-                          addedToCart[product.id]
+                        className={`w-full font-semibold py-4 rounded-2xl flex items-center justify-center gap-2 transition-all duration-200 shadow-lg active:scale-95 ${addedToCart[product.id]
                             ? 'bg-gradient-to-r from-green-500 to-green-600 text-white'
                             : 'bg-gradient-to-r from-pink-500 via-pink-600 to-purple-600 text-white'
-                        }`}
+                          }`}
                       >
                         {addedToCart[product.id] ? (
                           <>
@@ -383,7 +446,7 @@ export default function Shop() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
-                
+
                 <div className="relative bg-gradient-to-br from-pink-50/50 via-purple-50/50 to-blue-50/50 rounded-t-3xl overflow-hidden pt-16 pb-8">
                   <img
                     src={selectedProduct.colors[selectedColors[selectedProduct.id] || 0].image}
@@ -398,7 +461,7 @@ export default function Shop() {
                 <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
                   {selectedProduct.name}
                 </h2>
-                
+
                 <div className="flex items-center gap-3 mb-6">
                   <div className="flex items-center bg-yellow-50 px-3 py-2 rounded-xl">
                     <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
@@ -419,9 +482,9 @@ export default function Shop() {
                       >
                         <div
                           className="absolute inset-0 rounded-full transition-shadow"
-                          style={{ 
+                          style={{
                             backgroundColor: color.hex,
-                            boxShadow: (selectedColors[selectedProduct.id] || 0) === idx 
+                            boxShadow: (selectedColors[selectedProduct.id] || 0) === idx
                               ? `0 0 0 3px white, 0 0 0 6px ${color.hex}`
                               : '0 0 0 2px rgba(0,0,0,0.08)'
                           }}
@@ -459,16 +522,15 @@ export default function Shop() {
                   </ul>
                 </div>
 
-                <button 
+                <button
                   onClick={() => {
                     handleAddToCart(selectedProduct);
                     setTimeout(() => setSelectedProduct(null), 1200);
                   }}
-                  className={`w-full font-bold py-4 sm:py-5 rounded-2xl flex items-center justify-center gap-3 transition-all duration-200 shadow-xl text-lg active:scale-95 ${
-                    addedToCart[selectedProduct.id]
+                  className={`w-full font-bold py-4 sm:py-5 rounded-2xl flex items-center justify-center gap-3 transition-all duration-200 shadow-xl text-lg active:scale-95 ${addedToCart[selectedProduct.id]
                       ? 'bg-gradient-to-r from-green-500 to-green-600 text-white'
                       : 'bg-gradient-to-r from-pink-500 via-pink-600 to-purple-600 text-white'
-                  }`}
+                    }`}
                 >
                   {addedToCart[selectedProduct.id] ? (
                     <>
